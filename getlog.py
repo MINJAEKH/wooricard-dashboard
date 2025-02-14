@@ -14,17 +14,15 @@ app = FastAPI()
 # 데이터 불러오기
 file_path = "./data/edu_data_F.csv"
 df = pd.read_csv(file_path)
-df = df.iloc[:, :5]
 
 # 스트리밍 종료 이벤트
 stop_event = asyncio.Event()
 
 async def stream_logs():
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         if stop_event.is_set():  # 🔹 stop_event가 True이면 중단
             logger.info("-"*10,"Logging Stopped by User----","-"*10)
             break
-        
         data_dict = data.to_dict()
         logger.info(data_dict)
         yield str(data_dict) + "\n"
