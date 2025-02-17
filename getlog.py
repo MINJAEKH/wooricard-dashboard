@@ -4,7 +4,7 @@ import pandas as pd
 import asyncio
 import logging
 
-# uvicorn main:app --log-level info
+# uvicorn getlog:app --log-level info
 
 logging.basicConfig(level=logging.INFO, filename='myapp.log', encoding="utf-8")
 logger = logging.getLogger(__name__)
@@ -21,12 +21,12 @@ stop_event = asyncio.Event()
 async def stream_logs():
     for _, data in df.iterrows():
         if stop_event.is_set():  # 🔹 stop_event가 True이면 중단
-            logger.info("-"*10,"Logging Stopped by User----","-"*10)
+            logger.info("-"*10,"Logging Stopped by User","-"*10)
             break
         data_dict = data.to_dict()
         logger.info(data_dict)
         yield str(data_dict) + "\n"
-        await asyncio.sleep(5)
+        await asyncio.sleep(2)
 
 @app.get("/getlog")
 async def getlog():
